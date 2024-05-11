@@ -1861,6 +1861,8 @@ int try_to_unuse(unsigned int type, bool frontswap,
 		    likely(page_private(page) == entry.val))
 			delete_from_swap_cache(page);
 
+                //kjr add
+                //trace_page_swap_out(entry.val, page);
 		/*
 		 * So we could skip searching mms once swap count went
 		 * to 1, we did not mark any present ptes as dirty: must

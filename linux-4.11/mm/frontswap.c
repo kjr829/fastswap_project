@@ -20,6 +20,7 @@
 #include <linux/frontswap.h>
 #include <linux/swapfile.h>
 
+
 DEFINE_STATIC_KEY_FALSE(frontswap_enabled_key);
 
 /*
@@ -281,6 +282,8 @@ int __frontswap_store(struct page *page)
 	if (ret == 0) {
 		__frontswap_set(sis, offset);
 		inc_frontswap_succ_stores();
+                //kjr add
+                //trace_page_swap_out(entry.val, page);
 	} else {
 		inc_frontswap_failed_stores();
 	}
@@ -324,6 +327,8 @@ int __frontswap_load(struct page *page)
 	}
 	if (ret == 0) {
 		inc_frontswap_loads();
+                //kjr add
+                //trace_page_swap_in(entry.val, page);
 		if (frontswap_tmem_exclusive_gets_enabled) {
 			SetPageDirty(page);
 			__frontswap_clear(sis, offset);

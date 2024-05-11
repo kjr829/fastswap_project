@@ -37,6 +37,8 @@
 
 #include <asm/tlbflush.h> /* for arch/microblaze update_mmu_cache() */
 
+#include <trace/events/swap.h>
+
 static struct vfsmount *shm_mnt;
 
 #ifdef CONFIG_SHMEM
@@ -1321,6 +1323,8 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
 		mutex_unlock(&shmem_swaplist_mutex);
 		BUG_ON(page_mapped(page));
 		swap_writepage(page, wbc);
+                //kjr add
+                trace_page_swap_out(swap.val, page);
 		return 0;
 	}
 

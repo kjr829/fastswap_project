@@ -23,6 +23,9 @@
 
 #include <asm/pgtable.h>
 
+#define CREATE_TRACE_POINTS
+#include <trace/events/swap.h>
+
 /*
  * swapper_space is a fiction, retained to simplify the path through
  * vmscan's shrink_page_list.
@@ -421,8 +424,11 @@ struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
 	struct page *retpage = __read_swap_cache_async(entry, gfp_mask,
 			vma, addr, &page_was_allocated);
 
-	if (page_was_allocated)
+	if (page_was_allocated){
 		swap_readpage(retpage);
+                //kjr add
+                trace_page_swap_in(entry.val, retpage);
+        }
 
 	return retpage;
 }
@@ -454,6 +460,8 @@ struct page *read_swap_cache_sync(swp_entry_t entry, gfp_t gfp_mask,
 		if(!bug_test_ret){
 			swap_readpage(retpage);
 		}
+                //kjr add
+                trace_page_swap_in(entry.val, retpage);
 	}
 
 	return retpage;

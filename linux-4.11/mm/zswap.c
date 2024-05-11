@@ -42,6 +42,8 @@
 #include <linux/writeback.h>
 #include <linux/pagemap.h>
 
+#include <trace/events/swap.h>
+
 /*********************************
 * statistics
 **********************************/
@@ -904,6 +906,9 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
 
 	/* start writeback */
 	__swap_writepage(page, &wbc, end_swap_bio_write);
+        //kjr add
+        trace_page_swap_out(swpentry.val, page);
+
 	put_page(page);
 	zswap_written_back_pages++;
 

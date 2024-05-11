@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
     struct timespec begin, end;
     srand(1234567);
 
-    int walk_pagenum = 76800 , 
+    int walk_pagenum = 262144 , 
       s_interval = 0, l_interval = 2, round = 75, sleeptime = 0;
     //900 round ≈ 30min at l_interval = 2s
 

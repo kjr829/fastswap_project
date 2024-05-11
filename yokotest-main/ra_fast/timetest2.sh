@@ -18,7 +18,7 @@ echo > /sys/kernel/debug/tracing/set_event
 echo "nop" > /sys/kernel/debug/tracing/current_tracer
 #cat /sys/kernel/debug/tracing/current_tracer
 #add lru_gen tracer
-echo >> /sys/kernel/debug/tracing/set_ftrace_filter
+#echo >> /sys/kernel/debug/tracing/set_ftrace_filter
 # echo "*lru_gen*" >> /sys/kernel/debug/tracing/set_ftrace_filter
 # echo "*mm_lru*" >> /sys/kernel/debug/tracing/set_ftrace_filter
 # #echo "folio_add_lru" >> /sys/kernel/debug/tracing/set_ftrace_filter
@@ -40,10 +40,10 @@ echo >> /sys/kernel/debug/tracing/set_ftrace_filter
 
 echo "add all lru_gen tracers below: "
 echo > /sys/kernel/debug/tracing/set_ftrace_filter
-cat /sys/kernel/debug/tracing/set_ftrace_filter
+#cat /sys/kernel/debug/tracing/set_ftrace_filter
 # echo "function" > /sys/kernel/debug/tracing/current_tracer
 # echo $$ >> /sys/kernel/debug/tracing/set_ftrace_pid
-echo 0 > /sys/kernel/debug/tracing/events/pagemap/enable
+#echo 0 > /sys/kernel/debug/tracing/events/pagemap/enable
 #echo 0 > /sys/kernel/debug/tracing/events/lru_gen/enable
 #echo 1 > /sys/kernel/debug/tracing/events/swap/enable
 #echo 1 > /sys/kernel/debug/tracing/events/swap/get_swap_pages_noswap/enable
@@ -82,7 +82,7 @@ echo 0 > /sys/kernel/debug/tracing/events/pagemap/enable
 echo 0 > /sys/kernel/debug/tracing/events/kmem/enable
 
 #trace on
-echo 0 > /sys/kernel/debug/tracing/tracing_on
+echo 1 > /sys/kernel/debug/tracing/tracing_on
 
 #damon set
 #DAMON="/sys/kernel/mm/damon/admin"
@@ -98,7 +98,9 @@ echo 0 > /sys/kernel/debug/tracing/tracing_on
 #echo 100 >  $DAMON/kdamonds/0/contexts/0/monitoring_attrs/intervals/sample_us
 #echo 10000 >  $DAMON/kdamonds/0/contexts/0/monitoring_attrs/intervals/aggr_us
 
-
+echo 1 > /sys/kernel/debug/tracing/events/swap/enable
+echo 1 > /sys/kernel/debug/tracing/events/swap/page_swap_in/enable
+echo 1 > /sys/kernel/debug/tracing/events/swap/page_swap_out/enable
 
 #do the work here
 #./cpp/pagerank -d "-" ./3rddataset/PR-dataset/web-BerkStan.txt >> info.txt 2>&1 & 
@@ -109,7 +111,7 @@ echo $$ >> /sys/fs/cgroup/memory/yuri/cgroup.procs
 echo "now in the group are:"
 cat /sys/fs/cgroup/memory/yuri/cgroup.procs
 
-#sleep 2
+sleep 2
 # ./pagewalker > info.txt 2>&1 &
 ./pagewalker > info.txt 2>&1
 echo "pagewalker finish"
@@ -134,6 +136,7 @@ taskset -pc 1 $!
 #taskset -pc 13,14 $!
 
 sleep 20
+cat /sys/kernel/debug/tracing/trace >> trace_record.txt
 #ps -ef | grep pagewalker
 #./cpp/pagerank -d "-" ./3rddataset/PR-dataset/web-BerkStan.txt &
 echo 0 > /sys/kernel/debug/tracing/tracing_on
